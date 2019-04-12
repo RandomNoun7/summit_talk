@@ -70,10 +70,18 @@ All good right? Well, this is a solution for Windows so it doesn't run on other 
 
 Even with all of the caveats, this is a major improvement and lights up Modules that aren't strictly supported. This is an important bridge to the time when the Module finally becomes PowerShell Core compliant.
 
+## Writing xPlat scripts
+
+## Path Separator
+
+## Joining Paths
+
 ## Notes from The Field
 
 Ok, we're gotten past the shiny new cross platform stuff and some of the gotchas, what are some things to be aware using PowerShell Core?
 
+## Notes from the field - Clipboard
+As per Steve Lee: Use ClipboardText module: https://github.com/PowerShell/PowerShell/issues/3618#issuecomment-391146900
 ## Notes from The Field - Platform Detection
 ## Notes from The Field - Restricting to Platforms
 ## Notes from The Field - Aliases are not your Friend
@@ -133,3 +141,17 @@ However beware the differences in platform support of cmdlets like Get-ChildItem
 Lastly file encoding can burn you if you use encodings other than ASCII or UTF8. Some older editors use UTF16 or UTF8 with byte-order-mark or BOM encoding, which is unreadable by some linux utilities. Set-Content used to be an offender with this, as was set to UTF8 by default.
 
 ## Notes from The Field - cAse...
+
+
+Questions to answer:
+
+1. why you would choose PowerShell Core over other common 'cross-platform' options?
+2. How does PowerShell Core get installed on other platforms?
+3. What common tasks are already handled by PowerShell Core, what type of tasks will you have to write code for? 
+4. What scenarios are not yet a good fit for PowerShell Core?
+5. common gotchas and anti-patterns when using PowerShell cross-platform, by reviewing the real, live, PowerShell core script that was converted from gulp that works in TravisCI
+6. Not only can built-in aliases can trip you up, but what about the underlying implementations of your everyday cmdlets? How does Get-Childitem work differently on Linux?
+  - https://github.com/PowerShell/PowerShell/issues/6833#issuecomment-389690161
+  - https://github.com/PowerShell/PowerShell/issues/9244
+7. What about Invoke-WebRequest? When you encounter a command that has to be run differently on different platforms, how do you handle it in a reusable way?
+8. We will finish up by reviewing what went well with the conversion, what went wrong, and if we would choose to do it again (we would).
