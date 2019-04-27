@@ -100,20 +100,6 @@ Note:
 
 This allowed the PowerShell team to port most of the PowerShell engine over and gain the ability to run PowerShell on multiple platforms, without changing much of the surface API you use.
 
-<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++?image=assets/img/summit_logo.png&position=top 2% left 5%&size=15%&opacity=30
-
-@snap[north]
-### PowerShell Core
-@snapend
-
-@snap[text-left]
-PowerShell was ported to run on .NET core and viola!
-@snapend
-
-@css[fragment](**PowerShell Core**)
-
-@css[fragment](That was easy. We done here?) -->
-
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++?image=assets/img/summit_logo.png&position=top 2% left 5%&size=15%&opacity=30
 
 @snap[north text-left span-80]
@@ -139,78 +125,6 @@ Missing Modules
 - SQL
 @ulend
 @snapend
-
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++?image=assets/img/summit_logo.png&position=top 2% left 5%&size=15%&opacity=30
-
-@snap[north span-80]
-
-#### Windows Compatibility
-
-@snapend
-
-There is hope for some modules that don't support PowerShell Core.
-
-Enter the Windows Compatibility Module.
-
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++?image=assets/img/summit_logo.png&position=top 2% left 5%&size=15%&opacity=30
-
-@snap[north span-80]
-
-#### The Good
-
-@snapend
-
-- Uses Implicit Remoting
-- Brings back some of the incompatible modules you lost
-
-Note:
-
-Implicit Remoting Blog Post: https://devblogs.microsoft.com/scripting/remoting-the-implicit-way/
-
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++?image=assets/img/summit_logo.png&position=top 2% left 5%&size=15%&opacity=30
-
-@snap[north span-80]
-
-#### The Bad
-
-@snapend
-
-- It serializes responses across a session
-- Won't help with Windows Forms
-- Won't help on Linux
-
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++?image=assets/img/summit_logo.png&position=top 2% left 5%&size=15%&opacity=30
-
-@snap[north span-80]
-
-#### CompatiblePSEditions
-
-@snapend
-
-A property that module authors can use to declare their modules compatible with either PowerShell core, Desktop, or both.
-
-```
-Get-Module -ListAvailable -PSEdition Desktop
-```
-
-```
-Import-Module Posh-Git -SkipEditionCheck
-```
-
-Note:
-
-https://docs.microsoft.com/en-us/powershell/gallery/concepts/module-psedition-support
-https://docs.microsoft.com/en-us/powershell/module/Microsoft.PowerShell.Core/About/about_PowerShell_Editions?view=powershell-6
-
-Allows loading a module from the %windir%\System32\WindowsPowerShell\v1.0\Modules module directory into PowerShell Core when that module does not specify Core in the CompatiblePSEditions manifest field.
-
-When importing a module from another path, this switch does nothing, since the check is not performed. On Linux and macOS, this switch does nothing.
-
-See about_PowerShell_Editions for more information.
-
- Warning
-
-Import-Module -SkipEditionCheck is still likely to fail to import a module. Even if it does succeed, invoking a command from the module may later fail when it tries to use an incompatible API.
 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++?image=assets/img/summit_logo.png&position=top 2% left 5%&size=15%&opacity=30
 
@@ -265,7 +179,6 @@ https://github.com/PowerShell/PowerShell/issues/4214
 
 - Designed as a Shell and a scripting language from the start
 - Remoting
-- Easy to install on all platforms
 - Take your skills learned on Windows to other platforms
 
 @ulend
@@ -281,8 +194,7 @@ https://github.com/PowerShell/PowerShell/issues/4214
 @ul
 
 - Difficult to install and use on Windows
-- Windows Hostile ecosystems
-- Learning curve
+- Windows hostile ecosystems
 
 @ulend
 
@@ -331,28 +243,60 @@ iex "& { $(irm https://aka.ms/install-powershell.ps1) } -UseMSI -Preview"
 
 --------------------------------------------------------------------------------?image=assets/img/summit_logo.png&position=top 2% left 5%&size=15%&opacity=30
 
+### What Good is This Thing?
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++?image=assets/img/summit_logo.png&position=top 2% left 5%&size=15%&opacity=30
+
+@snap[north span-80]
+
+#### What It's Good At
+
+@snapend
+
+@ul
+- Interacting with Web Services
+- Data Conversion and Manipulation
+- CICD/Build/Deployment Scripts
+- Pester
+@ulend
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++?image=assets/img/summit_logo.png&position=top 2% left 5%&size=15%&opacity=30
+
+@snap[north span-80]
+
+#### Maybe Not As Good At
+
+@snapend
+
+@ul
+- Deep System Integration
+- Displaying Interfaces
+- Colorized Output From Binaries
+@ulend
+
+Note:
+Checkpoint-Computer
+Service Cmdlets - Get-Service, etc.
+Transactions
+
+--------------------------------------------------------------------------------?image=assets/img/summit_logo.png&position=top 2% left 5%&size=15%&opacity=30
+
 ### Daily Use
 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++?image=assets/img/summit_logo.png&position=top 2% left 5%&size=15%&opacity=30
 
 @snap[north span-80]
 
-#### Profiles
+#### Where to Put Stuff
 
 @snapend
 
-On Windows
-
 ```powershell
-PS > $profile | fl * -for
-
-AllUsersAllHosts       : C:\Program Files\PowerShell\6\profile.ps1
-AllUsersCurrentHost    : C:\Program Files\PowerShell\6\Microsoft.PowerShell_profile.ps1
-CurrentUserAllHosts    : C:\Users\james\Documents\PowerShell\profile.ps1
-CurrentUserCurrentHost : C:\Users\james\Documents\PowerShell\Microsoft.PowerShell_profile.ps1
+/root> $env:PSModulePath -split [System.IO.Path]::PathSeparator
+/root/.local/share/powershell/Modules
+/usr/local/share/powershell/Modules
+/opt/microsoft/powershell/6/Modules
 ```
-
-On Mac/Linux
 
 ```powershell
 PS > $profile | fl * -for
@@ -366,33 +310,6 @@ CurrentUserCurrentHost : /home/james/.config/powershell/Microsoft.PowerShell_pro
 Note:
 
 Notice the .config directory. That may seem strang if you aren't familair with the XDG Base Directory Specification https://specifications.freedesktop.org/basedir-spec/latest/index.html#introduction
-
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++?image=assets/img/summit_logo.png&position=top 2% left 5%&size=15%&opacity=30
-
-@snap[north span-80]
-
-#### Modules
-
-@snapend
-
-On Windows
-
-```powershell
-PS > $env:PSModulePath -split [System.IO.Path]::PathSeparator
-C:\Users\Administrator\Documents\PowerShell\Modules
-C:\Program Files\PowerShell\Modules
-c:\program files\powershell\6\Modules
-C:\Windows\system32\WindowsPowerShell\v1.0\Modules
-```
-
-On Mac/Linux
-
-```powershell
-/root> $env:PSModulePath -split [System.IO.Path]::PathSeparator
-/root/.local/share/powershell/Modules
-/usr/local/share/powershell/Modules
-/opt/microsoft/powershell/6/Modules
-```
 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++?image=assets/img/summit_logo.png&position=top 2% left 5%&size=15%&opacity=30
 
@@ -435,55 +352,6 @@ Updated Get-ChildItem to work more like the *nix ls -R and the Windows DIR /S na
 --------------------------------------------------------------------------------?image=assets/img/summit_logo.png&position=top 2% left 5%&size=15%&opacity=30
 
 ### Notes from The Field
-
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++?image=assets/img/summit_logo.png&position=top 2% left 5%&size=15%&opacity=30
-
-@snap[north span-80]
-
-#### When to use shebangs
-
-@snapend
-
-@color[green](#!/usr/bin/env pwsh)
-
-
-**Interpreter Directive**
-
-Tells a Linux type system which interpreter to use to execute a script.
-
-Only worlks with PS Core, even on Windows.
-
-Good for:
-- Execute a script from the commandline
-- Git hooks
-
-Note:
-
-Shebang must be followed by an 'LF' line ending. 'CRLF' line endings will cause the directive to fail and the script will not be launched.
-
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++?image=assets/img/summit_logo.png&position=top 2% left 5%&size=15%&opacity=30
-
-@snap[north span-80]
-
-#### Git Hooks
-
-@snapend
-
-[Git hooks](https://githooks.com/) are scripts that are triggered by git work flow events. They can run before a commit, called a pre-commit hook, or before a push called the pre-rebase hook, and others.
-
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++?image=assets/img/summit_logo.png&position=top 2% left 5%&size=15%&opacity=30
-
-@snap[north span-80]
-
-#### Git Hooks
-
-@snapend
-
-@title[Triggering the Hook]
-
-Hooks must have a file name like the examples in a project's **.git/hooks** directory.
-The Interpreter directive tells git which program to send the file name of the hook to
-for execution.
 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++?image=assets/img/summit_logo.png&position=top 2% left 5%&size=15%&opacity=30
 
@@ -844,6 +712,59 @@ switch($true){
 }
 Get-Content @params
 ```
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++?image=assets/img/summit_logo.png&position=top 2% left 5%&size=15%&opacity=30
+
+@snap[north span-80]
+
+#### When to use shebangs
+
+@snapend
+
+@color[green](#!/usr/bin/env pwsh)
+
+
+**Interpreter Directive**
+
+Tells a Linux type system which interpreter to use to execute a script.
+
+Only works with PS Core, even on Windows.
+
+Good for:
+- Execute a script from the commandline
+- Git hooks
+
+Note:
+
+Shebang must be followed by an 'LF' line ending. 'CRLF' line endings will cause the directive to fail and the script will not be launched.
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++?image=assets/img/summit_logo.png&position=top 2% left 5%&size=15%&opacity=30
+
+@snap[north span-80]
+
+#### Git Hooks
+
+@snapend
+
+[Git hooks](https://githooks.com/) are scripts that are triggered by git work flow events. They can run before a commit, called a pre-commit hook, or before a push called the pre-rebase hook, and others.
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++?image=assets/img/summit_logo.png&position=top 2% left 5%&size=15%&opacity=30
+
+@snap[north span-80]
+
+#### Git Hooks
+
+@snapend
+
+@title[Triggering the Hook]
+
+Hooks must have a file name like the examples in a project's **.git/hooks** directory.
+The Interpreter directive tells git which program to send the file name of the hook to
+for execution.
+
+--------------------------------------------------------------------------------?image=assets/img/summit_logo.png&position=top 2% left 5%&size=15%&opacity=30
+
+# ?
 
 ---
 
